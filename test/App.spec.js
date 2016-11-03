@@ -4,7 +4,7 @@ const { expect } = require('chai')
 const React = require('react')
 const Search = require('../js/Search')
 const ShowCard = require('../js/ShowCard')
-const { shallow, mount  } = require('enzyme')
+const { shallow, mount, deep  } = require('enzyme')
 const { shows } = require('../public/data')
 const { store, rootReducer} = require('../js/Store')
 
