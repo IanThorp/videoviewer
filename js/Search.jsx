@@ -1,39 +1,26 @@
 const React = require('react')
 const ShowCard = require('./ShowCard')
 const Heading = require('./Heading')
-const { object } = React.PropTypes
+const { object, string } = React.PropTypes
+const { connector } = require('./Store')
 
-const Search = React.createClass({
-  getInitialState () {
-    return {
-      searchTerm: ''
-    }
-  },
-  propTypes: {
-    route: object
-  },
-  handleSearchTermChange (searchTerm) {
-    this.setState({ searchTerm })
-  },
-  render () {
-    return (
-      <div className='container'>
-        <Heading
-          handleSearchTermChange={this.handleSearchTermChange}
-          searchTerm={this.state.searchTerm}
-          showSearch
-        />
-        <div className='shows'>
-          {this.props.route.shows
-            .filter((show) => `${show.title} ${show.description}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0)
-            .map((show) => (
-              <ShowCard {...show} key={show.imdbID} />
-            ))
-          }
-        </div>
-      </div>
-    )
-  }
-})
+const Search = (props) => (
+  <div className='container'>
+    <Heading showSearch />
+    <div className='shows'>
+      {props.route.shows
+        .filter((show) => `${show.title} ${show.description}`.toUpperCase().indexOf(props.searchTerm.toUpperCase()) >= 0)
+        .map((show) => (
+          <ShowCard {...show} key={show.imdbID} />
+        ))
+      }
+    </div>
+  </div>
+)
 
-module.exports = Search
+Search.propTypes = {
+  route: object,
+  searchTerm: string
+}
+
+module.exports = connector(Search)
