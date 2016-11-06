@@ -1,8 +1,7 @@
 const React = require('react')
-const Header = require('./Header')
-const Store = require('./Store')
-const { connector } = Store
+const Heading = require('./Heading')
 const axios = require('axios')
+const { connector } = require('./Store')
 
 class Details extends React.Component {
   constructor (props) {
@@ -13,24 +12,27 @@ class Details extends React.Component {
     }
   }
   componentDidMount () {
-    console.log('here', this.props.shows[this.props.params.id].imdbID)
-    axios.get(`http://www.omdbapi.com/?i=${this.props.shows[this.props.params.id].imdbID}`)
+    axios.get(`http://www.omdbapi.com/?i=${this.assignShow(this.props.params.id).imdbID}`)
       .then((response) => {
         this.setState({omdbData: response.data})
       })
       .catch((error) => {
-        console.error('axios error', error)
+        console.erro('axios error', error)
       })
   }
+  assignShow (id) {
+    const showArray = this.props.shows.filter((show) => show.imdbID === id)
+    return showArray[0]
+  }
   render () {
-    const { title, description, year, poster, trailer } = this.props.shows[this.props.params.id]
+    const { title, description, year, poster, trailer } = this.assignShow(this.props.params.id)
     let rating
     if (this.state.omdbData.imdbRating) {
       rating = <h3 className='video-rating'>{this.state.omdbData.imdbRating}</h3>
     }
     return (
       <div className='container'>
-        <Header />
+        <Heading />
         <div className='video-info'>
           <h1 className='video-title'>{title}</h1>
           <h2 className='video-year'>({year})</h2>
@@ -46,9 +48,11 @@ class Details extends React.Component {
   }
 }
 
+const { object, arrayOf } = React.PropTypes
+
 Details.propTypes = {
-  params: React.PropTypes.object,
-  shows: React.PropTypes.arrayOf(React.PropTypes.object)
+  shows: arrayOf(object).isRequired,
+  params: object.isRequired
 }
 
 module.exports = connector(Details)

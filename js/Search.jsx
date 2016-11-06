@@ -1,30 +1,27 @@
 const React = require('react')
 const ShowCard = require('./ShowCard')
-const Header = require('./Header')
-const Store = require('./Store')
-const { connector } = Store
+const Heading = require('./Heading')
+const { connector } = require('./Store')
 
-class Search extends React.Component {
-  render () {
-    const searchTerm = this.props.searchTerm || ''
-    return (
-      <div className='container'>
-        <Header showSearch />
-        <div className='shows'>
-          {this.props.shows
-            .filter((show) => `${show.title} ${show.description}`.toUpperCase().indexOf(searchTerm.toUpperCase()) >= 0)
-            .map((show, index) => (
-              <ShowCard key={show.imdbID} id={index} {...show} />
-          ))}
-        </div>
-      </div>
-    )
-  }
-}
+const Search = (props) => (
+  <div className='container'>
+    <Heading showSearch />
+    <div className='shows'>
+      {props.shows
+        .filter((show) => `${show.title} ${show.description}`.toUpperCase().indexOf(props.searchTerm.toUpperCase()) >= 0)
+        .map((show) => (
+          <ShowCard {...show} key={show.imdbID} />
+        ))
+      }
+    </div>
+  </div>
+)
+
+const { object, string, arrayOf } = React.PropTypes
 
 Search.propTypes = {
-  shows: React.PropTypes.arrayOf(React.PropTypes.object),
-  searchTerm: React.PropTypes.string
+  shows: arrayOf(object),
+  searchTerm: string
 }
 
 module.exports = connector(Search)

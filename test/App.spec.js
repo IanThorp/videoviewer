@@ -1,49 +1,62 @@
 /* eslint-env mocha */
-const React = require('react')
-const chai = require('chai')
-const { expect } = chai
-const Search = require('../js/Search')
-const enzyme = require('enzyme')
-const { render } = enzyme
-const data = require('../public/data')
-const ReactRedux = require('react-redux')
-const { Provider } = ReactRedux
-const Header = require('../js/Header')
-const Store = require('../js/Store')
-const { store, reducer } = Store
 
-describe('<Header />', () => {
-  it('should render the brand', () => {
-    const wrapper = render(<Header store={store} />)
-    expect(wrapper.find('h1.brand').text()).to.equal('svideo')
+const { expect } = require('chai')
+const React = require('react')
+const Search = require('../js/Search')
+const ShowCard = require('../js/ShowCard')
+const { shallow, mount, deep  } = require('enzyme')
+const { shows } = require('../public/data')
+const { store, rootReducer} = require('../js/Store')
+
+xdescribe('<Search /> ',  () => {
+  it('should should render the brand', () => {
+    const wrapper = shallow(<Search />)
+    expect(wrapper.contains(<h1 className='brand'>svideo</h1>)).to.be.true
   })
+<<<<<<< HEAD
 })
 
 describe('<Search />', () => {
   const mockRoute = {
     shows: data.shows
   }
+=======
+>>>>>>> 680d293c838d9054a99abf6850e58b6702070787
 
   it('should render as many shows as there are data for', () => {
-    const wrapper = render(<Provider store={store}><Search route={mockRoute} /></Provider>)
-    expect(wrapper.find('div.show-card').length).to.equal(data.shows.length)
+    const wrapper = shallow(<Search />)
+    expect(wrapper.find(ShowCard).length).to.equal(shows.length)
   })
 
   it('should filter correctly given new state', () => {
+<<<<<<< HEAD
     store.dispatch({type: 'setSearchTerm', value: 'house'})
     const wrapper = render(<Provider store={store} ><Search route={mockRoute} /></Provider>)
     expect(wrapper.find('div.show-card').length).to.equal(2)
+=======
+    const wrapper = mount(<Search />)
+    const input = wrapper.find('.search-input')
+    input.node.value = 'house'
+    input.simulate('change')
+    expect(wrapper.state('searchTerm')).to.equal('house')
+    expect(wrapper.find('.show-card').length).to.equal(2)
+>>>>>>> 680d293c838d9054a99abf6850e58b6702070787
   })
 })
 
 describe('Store', () => {
   it('should bootstrap', () => {
-    const state = reducer(undefined, { type: '@@redux/INIT' })
-    expect(state).to.deep.equal({ searchTerm: '', shows: data.shows })
+    const state = rootReducer(undefined, { type: '@@redux/INIT' })
+    expect(state).to.deep.equal({ searchTerm: '' })
   })
 
   it('should handle setSearchTerm actions', () => {
+<<<<<<< HEAD
     const state = reducer({searchTerm: 'some random string'}, {type: 'setSearchTerm', value: 'correct string'})
     expect(state).to.deep.equal({searchTerm: 'correct string'})
+=======
+    const state = rootReducer({ searchTerm: 'some random string'}, { type: 'setSearchTerm', value: 'correct string' })
+    expect(state).to.deep.equal({ searchTerm: 'correct string' })
+>>>>>>> 680d293c838d9054a99abf6850e58b6702070787
   })
 })

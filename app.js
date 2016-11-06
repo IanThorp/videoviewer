@@ -16,7 +16,7 @@ const port = 5050
 const baseTemplate = fs.readFileSync('./index.html')
 const template = _.template(baseTemplate)
 const ClientApp = require('./js/ClientApp.jsx')
-const routes = ClientApp.Routes
+const Routes = ClientApp.Routes
 
 const app = express()
 
@@ -30,11 +30,9 @@ app.use((req, res) => {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     } else if (renderProps) {
       const body = ReactDOMServer.renderToString(
-        React.createElement(Provider, {store},
-          React.createElement(RouterContext, renderProps)
-        )
+        React.createElement(Provider, {store}, React.createElement(RouterContext, renderProps))
       )
-      res.status(200).send(template({body}))
+      res.status(200).send(template({ body }))
     } else {
       res.status(404).send('Not found')
     }

@@ -1,17 +1,16 @@
 const React = require('react')
-const ReactRouter = require('react-router')
-const { Link, browserHistory } = ReactRouter
-const Store = require('./Store')
-const { connector } = Store
+const { browserHistory } = require('react-router')
+const { Link } = require('react-router')
+const { connector } = require('./Store')
 
 class Landing extends React.Component {
   constructor (props) {
     super(props)
 
-    this.handleTermEvent = this.handleTermEvent.bind(this)
+    this.handleSearchTermEvent = this.handleSearchTermEvent.bind(this)
     this.goToSearch = this.goToSearch.bind(this)
   }
-  handleTermEvent (e) {
+  handleSearchTermEvent (e) {
     this.props.setSearchTerm(e.target.value)
   }
   goToSearch (e) {
@@ -23,17 +22,19 @@ class Landing extends React.Component {
       <div className='home-info'>
         <h1 className='title'>svideo</h1>
         <form onSubmit={this.goToSearch}>
-          <input onChange={this.handleTermEvent} className='search' type='text' value={this.props.searchTerm} placeholder='Search' />
+          <input value={this.props.searchTerm} onChange={this.handleSearchTermEvent} className='search' type='text' placeholder='Search' />
+          <Link to='/search' className='browse-all'> or Browse All</Link>
         </form>
-        <Link to='/search' className='browse-all'>or Browse All</Link>
       </div>
     )
   }
 }
 
+const { func, string } = React.PropTypes
+
 Landing.propTypes = {
-  setSearchTerm: React.PropTypes.func,
-  searchTerm: React.PropTypes.string
+  setSearchTerm: func,
+  searchTerm: string
 }
 
 module.exports = connector(Landing)
